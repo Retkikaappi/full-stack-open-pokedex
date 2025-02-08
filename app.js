@@ -9,11 +9,11 @@ app.get('/version', (req, resp) => {
   resp.send('1')
 })
 
-// app.get('/health', (req, res) => {
-//   // eslint-disable-next-line no-constant-condition
-//   if (true) throw 'error...  '
-//   res.send('ok')
-// })
+app.get('/health', (req, res) => {
+  // eslint-disable-next-line no-constant-condition
+  if (true) throw 'error...  '
+  res.send('ok')
+})
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
