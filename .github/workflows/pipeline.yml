@@ -18,7 +18,6 @@ jobs:
           npm install
           npx playwright install --with-deps
       - run: npm run eslint
-      - run: npm run build
       - run: npm test
       - name: Run e2e tests
         run: npm run test:e2e
@@ -28,6 +27,7 @@ jobs:
           name: e2e-reports
           path: playwright-report/
           retention-days: 30
+      - run: npm run build
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Deploy to fly.io
         run: flyctl deploy --remote-only
