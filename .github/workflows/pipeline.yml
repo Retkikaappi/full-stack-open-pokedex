@@ -30,10 +30,11 @@ jobs:
           name: e2e-reports
           path: playwright-report/
           retention-days: 30
-      - uses: superfly/flyctl-actions/setup-flyctl@master
+
       - name: Deploy to fly.io
         if: ${{ github.event_name == 'push' }}
-        run: |
+        uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: |
           npm run build
           flyctl deploy --remote-only
         env:
