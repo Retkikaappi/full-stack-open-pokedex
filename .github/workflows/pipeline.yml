@@ -31,7 +31,9 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
-      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - if: ${{ github.event_name == 'push' }}
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
       - name: Deploy to fly.io
         if: ${{ github.event_name == 'push' }}
         run: |
@@ -45,6 +47,7 @@ jobs:
     runs-on: ubuntu-20.04
     if: ${{ github.event_name == 'push' }}
     steps:
+      - uses: actions/checkout@v4
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@1.71.0
         env:
