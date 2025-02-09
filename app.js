@@ -5,7 +5,7 @@ const app = express()
 const PORT = process.env.PORT || 5000
 
 app.get('/version', (req, resp) => {
-  resp.send('8')
+  resp.send('9')
 })
 
 app.get('/health', (req, res) => {
