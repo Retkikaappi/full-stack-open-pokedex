@@ -1,4 +1,6 @@
 name: Deployment pipeline
+env:
+  HAS_SKIP: ${{ contains(toJson(github.event.commits.*.message) ,'#skip' ) }}
 
 on:
   pull_request:
@@ -31,11 +33,11 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
-      - if: ${{ github.event_name == 'push' }}
+      - if: ${{ github.event_name == 'push' && env.HAS_SKIP == 'false' }}
         uses: superfly/flyctl-actions/setup-flyctl@master
 
       - name: Deploy to fly.io
-        if: ${{ github.event_name == 'push' }}
+        if: ${{ github.event_name == 'push' && env.HAS_SKIP == 'false' }}
         run: |
           npm run build
           flyctl deploy --remote-only
@@ -54,6 +56,4 @@ jobs:
         uses: anothrNick/github-tag-action@1.71.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DRY_RUN: true
           DEFAULT_BUMP: patch
-          DEFAULT_BRANCH: main
