@@ -45,13 +45,10 @@ jobs:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
       - name: Discord webhook failure
-        uses: rjstone/discord-webhook-notify@v1.0.4
+        uses: sarisia/actions-status-discord@v1
         if: failure()
         with:
-          severity: error
-          details: 'Deployment failed'
-          text: Maybe text will fix the issue
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
 
   tag_release:
     needs: [simple_deployment_pipeline]
