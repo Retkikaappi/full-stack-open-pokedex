@@ -16,6 +16,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - name: failing succesfully
+        run: exit 1
       - name: Install dependencies
         run: |
           npm install
@@ -30,9 +32,6 @@ jobs:
           name: e2e-reports
           path: playwright-report/
           retention-days: 30
-
-      - name: failing succesfully
-        run: exit 1
 
       - if: ${{ github.event_name == 'push' }}
         uses: superfly/flyctl-actions/setup-flyctl@master
