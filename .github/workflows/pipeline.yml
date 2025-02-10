@@ -27,7 +27,7 @@ jobs:
       - name: Run e2e tests
         run: npm run test:e2e
       - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && github.event_name == 'push' }}
         with:
           name: e2e-reports
           path: playwright-report/
