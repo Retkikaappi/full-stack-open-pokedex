@@ -50,6 +50,7 @@ jobs:
         with:
           severity: error
           details: 'Deployment failed'
+          text: Maybe text will fix the issue
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
   tag_release:
