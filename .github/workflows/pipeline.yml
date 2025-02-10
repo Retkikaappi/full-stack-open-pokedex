@@ -24,7 +24,7 @@ jobs:
       - run: npm test
       - name: Run e2e tests
         run: npm run test:e2e
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v16
         if: ${{ !cancelled() }}
         with:
           name: e2e-reports
@@ -42,6 +42,16 @@ jobs:
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
+      - name: Discord webhook failure
+        uses: rjstone/discord-webhook-notify@v1
+        if: failure()
+        with:
+          severity: error
+          username: FSO Discord Notifier
+          avatarUrl: https://upload.wikimedia.org/wikipedia/fi/thumb/2/21/Helsingin_yliopisto.svg/1280px-Helsingin_yliopisto.svg.png
+          details: 'Deployment/merge failed'
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
   tag_release:
     needs: [simple_deployment_pipeline]
     runs-on: ubuntu-20.04
@@ -55,3 +65,36 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
+      - name: Discord webhook failure
+        uses: rjstone/discord-webhook-notify@v1
+        if: failure()
+        with:
+          severity: error
+          username: FSO Discord Notifier
+          avatarUrl: https://upload.wikimedia.org/wikipedia/fi/thumb/2/21/Helsingin_yliopisto.svg/1280px-Helsingin_yliopisto.svg.png
+          details: 'Tagging failed'
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
+  notifications:
+    needs: [tag_release]
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Discord webook
+        uses: rjstone/discord-webhook-notify@v1
+        if: success()
+        with:
+          severity: info
+          username: FSO Discord Notifier
+          color: '#00ff00'
+          avatarUrl: https://upload.wikimedia.org/wikipedia/fi/thumb/2/21/Helsingin_yliopisto.svg/1280px-Helsingin_yliopisto.svg.png
+          description: |
+            - **Repository:** ${{ github.event.repository }}
+            - **Compare changes:** ${{ github.event.compare }}
+            - **Hash:** ${{ github.event.after }}
+            - **Head commit message:** ${{ github.event.head_commit.message }}
+
+          details: |
+            --------------------------------------------------------------
+            - **Committer:** ${{github.event.head_commit.author.username}}
+            - **Pusher:** ${{github.event.pusher.name}}
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
