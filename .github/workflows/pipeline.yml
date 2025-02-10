@@ -65,8 +65,6 @@ jobs:
     runs-on: ubuntu-20.04
     if: ${{ github.event_name == 'push' && !contains(toJson(github.event.commits.*.message) ,'#skip' )}}
     steps:
-      - name: failing succesfully
-        run: exit 1
       - uses: actions/checkout@v4
         with:
           fetch-depth: '0'
