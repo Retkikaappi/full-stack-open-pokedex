@@ -49,8 +49,6 @@ jobs:
         if: failure()
         with:
           severity: error
-          username: FSO Discord Notifier
-          avatarUrl: https://upload.wikimedia.org/wikipedia/fi/thumb/2/21/Helsingin_yliopisto.svg/1280px-Helsingin_yliopisto.svg.png
           details: 'Deployment failed'
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
